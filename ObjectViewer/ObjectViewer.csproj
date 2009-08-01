@@ -42,6 +42,9 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="FunctionScripts.cs" />
+    <Compile Include="ObjectManager.cs" />
+    <Compile Include="Parsers\AnimatedObjectParser.cs" />
     <Compile Include="Parsers\CsvB3dObjectParser.cs" />
     <Compile Include="Parsers\XObjectParser.cs" />
     <Compile Include="Fonts.cs" />
@@ -52,11 +55,11 @@
       <DependentUpon>formMessages.cs</DependentUpon>
     </Compile>
     <Compile Include="InterfaceS.cs" />
-    <Compile Include="ObjectManagerS.cs" />
     <Compile Include="ProgramS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RendererS.cs" />
     <Compile Include="TextureManager.cs" />
+    <Compile Include="TrainManagerS.cs" />
     <Compile Include="WorldS.cs" />
   </ItemGroup>
   <ItemGroup>
