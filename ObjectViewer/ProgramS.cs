@@ -18,6 +18,8 @@ namespace OpenBve {
 		internal static Platform CurrentPlatform = Platform.Windows;
 		internal static bool CurrentlyRunOnMono = false;
 		internal static bool UseFilesystemHierarchyStandard = false;
+		internal enum ProgramType { OpenBve, ObjectViewer, RouteViewer, Other }
+		internal const ProgramType CurrentProgramType = ProgramType.ObjectViewer;
 
 		// members
 		private static bool Quit = false;

@@ -551,7 +551,9 @@ namespace OpenBve {
 					Keys = new string[][] { new string[] { "F7" } };
 					RenderKeys(4.0, 4.0, 20.0, Keys);
 					RenderString(32.0, 4.0, Fonts.FontType.Small, "Open one or more objects", -1, 1.0f, 1.0f, 1.0f, true);
+					RenderString((double)ScreenWidth - 8.0, (double)ScreenHeight - 20.0, Fonts.FontType.Small, "v" + System.Windows.Forms.Application.ProductVersion, 1, 1.0f, 1.0f, 1.0f, true);
 				} else {
+					RenderString((double)0.5 * ScreenWidth - 88.0, 4.0, Fonts.FontType.Small, "Position: " + World.AbsoluteCameraPosition.X.ToString("0.00", Culture) + ", " + World.AbsoluteCameraPosition.Y.ToString("0.00", Culture) + ", " + World.AbsoluteCameraPosition.Z.ToString("0.00", Culture), -1, 1.0f, 1.0f, 1.0f, true);
 					string[][] Keys;
 					Keys = new string[][] { new string[] { "F5" }, new string[] { "F7" }, new string[] { "del" } };
 					RenderKeys(4.0, 4.0, 24.0, Keys);
@@ -873,7 +875,7 @@ namespace OpenBve {
 		}
 
 		// sort polygons
-		private static void SortPolygons(ObjectFace[] List, int ListCount, double[] ListDistance, int ListOffset, double TimeElapsed) {
+		private static void SortPolygons(ObjectFace[] List, int ListCount, double[] ListDistance, int ListIndex, double TimeElapsed) {
 			// calculate distance
 			double cx = World.AbsoluteCameraPosition.X;
 			double cy = World.AbsoluteCameraPosition.Y;
@@ -913,7 +915,7 @@ namespace OpenBve {
 			Array.Sort<double, ObjectFace>(ListDistance, List, 0, ListCount);
 			// update object list
 			for (int i = 0; i < ListCount; i++) {
-				ObjectList[List[i].ObjectListIndex].FaceListIndices[List[i].FaceIndex] = (i << 2) + ListOffset;
+				ObjectList[List[i].ObjectListIndex].FaceListIndices[List[i].FaceIndex] = (i << 3) + ListIndex;
 			}
 		}
 
