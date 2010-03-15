@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace OpenBve {
 	public partial class formMessages : Form {
@@ -7,30 +8,62 @@ namespace OpenBve {
 			InitializeComponent();
 		}
 
-		// show messages
-		internal static DialogResult ShowMessages() {
-			formMessages Dialog = new formMessages();
-			Dialog.listviewMessages.Items.Clear();
-			for (int i = 0; i < Interface.MessageCount; i++) {
+        // show messages
+        internal static DialogResult ShowMessages() {
+            formMessages Dialog = new formMessages();
+            Dialog.listviewMessages.Items.Clear();
+	        // Imagelist, from RouteViewer - Gary Harris 13/5/09
+			Dialog.listviewMessages.SmallImageList = new ImageList();
+			string Folder = Interface.GetDataFolder("Menu");
+			try {
+				Dialog.listviewMessages.SmallImageList.Images.Add("information", Image.FromFile(Interface.GetCombinedFileName(Folder, "icon_information.png")));
+			} catch { }
+			try {
+				Dialog.listviewMessages.SmallImageList.Images.Add("warning", Image.FromFile(Interface.GetCombinedFileName(Folder, "icon_warning.png")));
+			} catch { }
+			try {
+				Dialog.listviewMessages.SmallImageList.Images.Add("error", Image.FromFile(Interface.GetCombinedFileName(Folder, "icon_error.png")));
+			} catch { }
+			try {
+				Dialog.listviewMessages.SmallImageList.Images.Add("critical", Image.FromFile(Interface.GetCombinedFileName(Folder, "icon_critical.png")));
+			} catch { }
+            
+            for (int i = 0; i < Interface.MessageCount; i++) {
 				string t = "Unknown";
+				string g = "information";
 				switch (Interface.Messages[i].Type) {
 					case Interface.MessageType.Information:
 						t = "Information";
+						g = "information";
 						break;
 					case Interface.MessageType.Warning:
 						t = "Warning";
+						g = "warning";
 						break;
 					case Interface.MessageType.Error:
 						t = "Error";
+						g = "error";
 						break;
 					case Interface.MessageType.Critical:
 						t = "Critical";
+						g = "critical";
 						break;
 				}
-				ListViewItem a = Dialog.listviewMessages.Items.Add(t);
+				ListViewItem a = Dialog.listviewMessages.Items.Add(t, g);
 				a.SubItems.Add(Interface.Messages[i].Text);
 			}
 			Dialog.listviewMessages.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+
+	        // Alternate line shading - Gary Harris 13/5/09
+			int j = 0;
+			Color shaded = Color.FromArgb( 240, 240, 240 );
+			foreach (ListViewItem item in Dialog.listviewMessages.Items) {
+				if (j++ % 2 == 1) {
+					item.BackColor = shaded;
+					item.UseItemStyleForSubItems = true;
+				}
+			}
+
 			DialogResult Result = Dialog.ShowDialog();
 			Dialog.Dispose();
 			return Result;
@@ -69,6 +102,15 @@ namespace OpenBve {
 				}
 			}
 		}
+		
+        // Copy to clipboard - Gary Harris 13/5/09
+        private void ButtonClipboardClick(object sender, EventArgs e) {
+       		string line = "";
+        	for (int i = 0;i <  listviewMessages.Items.Count;i++ ) {
+        		line += listviewMessages.Items[i].SubItems[0].Text + "\t\t" + listviewMessages.Items[i].SubItems[1].Text + "\n";
+        	}
+       		Clipboard.SetDataObject(line, true);
+        }
 		
 	}
 }
